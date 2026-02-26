@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const walletRoutes = require("./routes/wallet.routes");
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/wallets", walletRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Digital Wallet API Running" });
