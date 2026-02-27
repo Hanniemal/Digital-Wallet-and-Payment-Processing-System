@@ -29,8 +29,17 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
+
+userSchema.virtual("wallet", {
+  ref: "Wallet",
+  localField: "_id",
+  foreignField: "user",
+  justOne: true,
+});
 
 userSchema.methods.toPublicJSON = function toPublicJSON() {
   return {
@@ -44,4 +53,3 @@ userSchema.methods.toPublicJSON = function toPublicJSON() {
 };
 
 module.exports = mongoose.model("User", userSchema);
-
