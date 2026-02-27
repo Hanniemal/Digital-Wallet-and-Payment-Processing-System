@@ -39,7 +39,7 @@ This API solves that problem by implementing a scalable digital wallet infrastru
 
 ### Database
 
-* PostgreSQL
+* MongoDB 
 * Sequelize ORM
 
 ### Authentication & Security
@@ -226,9 +226,9 @@ JWT_SECRET=your_super_secret_key
 
 ---
 
-## 4️⃣ Setup PostgreSQL
+## 4️⃣ Setup MongoDB 
 
-1. Install PostgreSQL
+1. Install MongoDB 
 2. Create database:
 
 ```sql
