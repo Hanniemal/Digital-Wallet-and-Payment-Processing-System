@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const generateToken = require("../utils/generateToken");
+const walletService = require("./wallet.service");
 
 const allowedRoles = ["admin", "staff", "user"];
 
@@ -29,12 +30,27 @@ const register = async ({ name, email, password, role }) => {
 
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  const user = await User.create({
-    name: name.trim(),
-    email: normalizedEmail,
-    password: hashedPassword,
-    role: normalizedRole || "user",
-  });
+  let user;
+  let wallet;
+
+  try {
+    user = await User.create({
+      name: name.trim(),
+      email: normalizedEmail,
+      password: hashedPassword,
+      role: normalizedRole || "user",
+    });
+
+    wallet = await walletService.createWalletForUser({
+      userId: user._id,
+      currency: "NGN",
+    });
+  } catch (createError) {
+    if (user && user._id) {
+      await User.findByIdAndDelete(user._id);
+    }
+    throw createError;
+  }
 
   const token = generateToken({
     id: user._id.toString(),
@@ -44,6 +60,7 @@ const register = async ({ name, email, password, role }) => {
 
   return {
     user: user.toPublicJSON(),
+    wallet: wallet.toPublicJSON(),
     token,
   };
 };
@@ -87,4 +104,3 @@ module.exports = {
   register,
   login,
 };
-
