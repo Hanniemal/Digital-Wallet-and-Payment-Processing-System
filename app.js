@@ -6,6 +6,10 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
 const logger = require("./utils/logger");
 const globalValidationMiddleware = require("./middlewares/validation.middleware");
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
+const walletRoutes = require("./routes/wallet.routes");
+const transactionRoutes = require("./routes/transaction.routes");
 const {
   notFoundHandler,
   errorHandler,
@@ -26,6 +30,10 @@ app.use(
 app.use(morgan("dev", { stream: logger.morganStream }));
 app.use(globalValidationMiddleware);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/wallets", walletRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Digital Wallet API Running" });
