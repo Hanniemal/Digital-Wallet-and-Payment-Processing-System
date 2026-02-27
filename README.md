@@ -1,301 +1,162 @@
-# 📘 Digital Wallet & Payment Processing API
+# Digital Wallet and Payment Processing API
 
-## 🚀 Project Overview
+REST API for user authentication, wallet management, and transaction processing using Node.js, Express, and MongoDB.
 
-The **Digital Wallet & Payment Processing API** is a RESTful backend system built with Node.js and Express.
+## Features
 
-This system enables users to:
+- User registration and login
+- JWT authentication and protected routes
+- Role-based access control (`admin`, `staff`, `user`)
+- User management endpoints (admin-protected actions)
+- Automatic wallet creation on registration
+- Wallet details and balance retrieval
+- Deposit, withdraw, and wallet-to-wallet transfer
+- Transaction history with pagination
+- Atomic transaction operations using MongoDB sessions
+- Security and infrastructure middleware:
+  - Helmet
+  - Rate limiting
+  - Request logging (Morgan with custom logger stream)
+  - Centralized error handling
+  - Global request body validation
+- Swagger docs at `/api-docs`
+- Postman collection included
 
-* Register and authenticate securely
-* Create and manage digital wallets
-* Perform deposits, withdrawals, and transfers
-* Track transaction history
-* Enforce role-based access control (Admin, Staff, User)
+## Tech Stack
 
-The project demonstrates secure API development, database integration, financial transaction logic, and clean architecture following industry best practices.
+- Node.js
+- Express
+- MongoDB + Mongoose
+- JWT (`jsonwebtoken`)
+- Password hashing (`bcryptjs`)
+- Swagger (`swagger-jsdoc`, `swagger-ui-express`)
 
----
+## Project Structure
 
-# 🏗 Problem Statement
-
-Many fintech startups and SMEs require a secure backend system to:
-
-* Manage user accounts
-* Handle wallet balances
-* Process financial transactions safely
-* Enforce role-based access
-* Maintain transaction integrity
-
-This API solves that problem by implementing a scalable digital wallet infrastructure using PostgreSQL and JWT authentication.
-
----
-
-# 🛠 Tech Stack
-
-### Backend
-
-* Node.js
-* Express.js
-
-### Database
-
-* PostgreSQL
-* Sequelize ORM
-
-### Authentication & Security
-
-* JWT (jsonwebtoken)
-* bcrypt (password hashing)
-* Helmet (security headers)
-* express-rate-limit (API rate limiting)
-
-### Logging
-
-* Morgan
-
-### Documentation
-
-* Swagger (swagger-ui-express)
-* Postman Collection
-
----
-
-# 📂 Project Structure
-
-```
-digital-wallet-api/
-│
-├── src/
-│   ├── controllers/
-│   ├── routes/
-│   ├── services/
-│   ├── models/
-│   ├── middlewares/
-│   ├── utils/
-│   ├── config/
-│
-├── app.js
-├── server.js
-├── .env.example
-├── .gitignore
-├── README.md
+```text
+.
+|-- server.js
+|-- src/
+|   |-- app.js
+|   |-- swagger.js
+|   |-- config/
+|   |   `-- db.js
+|   |-- controllers/
+|   |   |-- auth.controller.js
+|   |   |-- user.controller.js
+|   |   |-- wallet.controller.js
+|   |   `-- transaction.controller.js
+|   |-- routes/
+|   |   |-- auth.routes.js
+|   |   |-- user.routes.js
+|   |   |-- wallet.routes.js
+|   |   `-- transaction.routes.js
+|   |-- services/
+|   |   |-- auth.service.js
+|   |   |-- user.service.js
+|   |   |-- wallet.service.js
+|   |   `-- transaction.service.js
+|   |-- models/
+|   |   |-- index.js
+|   |   |-- user.model.js
+|   |   |-- wallet.model.js
+|   |   `-- transaction.model.js
+|   |-- middlewares/
+|   |   |-- auth.middleware.js
+|   |   |-- role.middleware.js
+|   |   |-- error.middleware.js
+|   |   `-- validate.middleware.js
+|   `-- utils/
+|       |-- logger.js
+|       `-- generateToken.js
+`-- postman/
+    `-- auth.postman_collection.json
 ```
 
-### Folder Responsibilities
+## Setup and Run
 
-* **controllers/** → Handles request & response logic
-* **routes/** → Defines API endpoints
-* **services/** → Business logic layer
-* **models/** → Database schemas and relationships
-* **middlewares/** → Auth, RBAC, validation, error handling
-* **utils/** → Helper functions
-* **config/** → Database and environment configuration
-
----
-
-# 🌿 Branching Strategy
-
-We follow a structured Git workflow:
-
-### Main Branches
-
-* `main` → Production-ready code
-* `develop` → Integration branch
-
-### Feature Branches
-
-Each team works on a dedicated feature branch:
-
-```
-feature/auth-system
-feature/user-management
-feature/wallet-system
-feature/transaction-engine
-feature/system-infrastructure
-```
-
-### Workflow
-
-1. Branch from `develop`
-2. Implement feature
-3. Open Pull Request to `develop`
-4. Team Lead reviews & merges
-5. Final integration: `develop` → `main`
-
----
-
-# 🔐 Authentication & Roles
-
-The system implements:
-
-* JWT-based authentication
-* Password hashing with bcrypt
-* Role-based access control:
-
-  * Admin
-  * Staff
-  * User
-
-Sensitive routes are protected using middleware.
-
----
-
-# 💳 Core Features
-
-### User Management
-
-* Register
-* Login
-* Role updates (Admin only)
-* User listing (Admin only)
-
-### Wallet Management
-
-* Automatic wallet creation
-* View wallet balance
-* Currency support (NGN default)
-
-### Transaction System
-
-* Deposit
-* Withdraw
-* Transfer
-* Transaction history
-* Atomic database transactions for financial integrity
-
----
-
-# 🗄 Database Schema Overview
-
-### Users
-
-* id (UUID)
-* email
-* password
-* role
-* created_at
-
-### Wallets
-
-* id (UUID)
-* user_id (FK)
-* balance
-* currency
-* created_at
-
-### Transactions
-
-* id (UUID)
-* wallet_id (FK)
-* type
-* amount
-* status
-* reference
-* created_at
-
----
-
-# ⚙️ Setup Instructions
-
-## 1️⃣ Clone Repository
+### 1. Clone
 
 ```bash
-git clone <repo-link>
-cd digital-wallet-api
+git clone <your-repo-url>
+cd Digital-Wallet-and-Payment-System
 ```
 
----
-
-## 2️⃣ Install Dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
----
+### 3. Configure environment
 
-## 3️⃣ Setup Environment Variables
+Copy `.env.example` to `.env` and set values:
 
-Create a `.env` file using the example below:
-
-```
+```env
+NODE_ENV=development
 PORT=5000
-DATABASE_URL=postgresql://username:password@localhost:5432/wallet_db
-JWT_SECRET=your_super_secret_key
+MONGODB_URI=mongodb://localhost:27017/digital_wallet
+JWT_SECRET=replace_with_secure_secret
+JWT_EXPIRES_IN=1d
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX=100
+API_BASE_URL=http://localhost:5000
 ```
 
----
+### 4. Start the API
 
-## 4️⃣ Setup PostgreSQL
-
-1. Install PostgreSQL
-2. Create database:
-
-```sql
-CREATE DATABASE wallet_db;
-```
-
----
-
-## 5️⃣ Run the Application
+Development:
 
 ```bash
 npm run dev
 ```
 
-Server runs at:
+Production-like:
 
-```
-http://localhost:5000
-```
-
----
-
-# 📄 API Documentation
-
-Swagger documentation will be available at:
-
-```
-http://localhost:5000/api-docs
+```bash
+npm start
 ```
 
-Postman collection will also be included in the repository.
+## API Access
 
----
+- Base URL: `http://localhost:5000`
+- Health check: `GET /health`
+- Swagger UI: `GET /api-docs`
 
-# 🛡 Security Measures
+## Main Route Groups
 
-* Password hashing
-* JWT authentication
-* Role-based route protection
-* Rate limiting
-* Helmet security headers
-* Centralized error handling
-* Request logging
+- Auth: `/api/auth`
+- Users: `/api/users`
+- Wallets: `/api/wallets`
+- Transactions: `/api/transactions`
 
----
+## Postman
 
-# 👨‍💻 Team Collaboration Rules
+Import:
 
-* Do not push directly to `main`
-* Always create feature branches
-* All PRs must be reviewed before merge
-* Write clear commit messages
-* Ensure code passes linting and runs without errors
+- `postman/auth.postman_collection.json`
 
----
+Set collection variable:
 
-# 📦 Deliverables
+- `baseUrl = http://localhost:5000`
 
-* GitHub repository
-* Clean folder structure
-* API documentation
-* Postman collection
-* Sample `.env.example`
-* README file
+Then run register/login and store JWT token for protected endpoints.
 
----
+## Branching Workflow
 
-# 🏁 Status
+- `main`: production-ready branch
+- `develop`: integration branch
+- feature branches:
+  - `feature/auth-system`
+  - `feature/user-management`
+  - `feature/wallet-system`
+  - `feature/transaction-engine`
+  - `feature/system-infrastructure`
 
-🚧 Under Active Development
+Recommended flow:
+
+1. Branch from `develop`
+2. Implement feature
+3. Open PR to `develop`
+4. After validation, promote `develop` to `main`
+
